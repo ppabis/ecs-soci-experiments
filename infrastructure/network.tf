@@ -2,7 +2,7 @@
 #                              VPC                                          #
 #############################################################################
 resource "aws_vpc" "main" {
-  tags = { Name = "ecs-soci-vpc" }
+  tags                 = { Name = "ecs-soci-vpc" }
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -10,7 +10,7 @@ resource "aws_vpc" "main" {
 
 # Internet Gateway
 resource "aws_internet_gateway" "main" {
-  tags = { Name = "ecs-soci-igw" }
+  tags   = { Name = "ecs-soci-igw" }
   vpc_id = aws_vpc.main.id
 }
 
@@ -18,23 +18,23 @@ resource "aws_internet_gateway" "main" {
 #                          Public subnets                                     #
 ###############################################################################
 resource "aws_subnet" "public_1" {
-  tags = { Name = "ecs-soci-public-${var.aws_region}a" }
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 1)
-  availability_zone = "${var.aws_region}a"
+  tags                    = { Name = "ecs-soci-public-${var.aws_region}a" }
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, 1)
+  availability_zone       = "${var.aws_region}a"
   map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "public_2" {
-  tags = { Name = "ecs-soci-public-${var.aws_region}b" }
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 2)
-  availability_zone = "${var.aws_region}b"
+  tags                    = { Name = "ecs-soci-public-${var.aws_region}b" }
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, 2)
+  availability_zone       = "${var.aws_region}b"
   map_public_ip_on_launch = true
 }
 
 resource "aws_route_table" "public" {
-  tags = { Name = "ecs-soci-public-rt" }
+  tags   = { Name = "ecs-soci-public-rt" }
   vpc_id = aws_vpc.main.id
 
   route {
@@ -57,21 +57,21 @@ resource "aws_route_table_association" "public_2" {
 #                          Private subnets                                     #
 ################################################################################
 resource "aws_subnet" "private_1" {
-  tags = { Name = "ecs-soci-private-${var.aws_region}a" }
+  tags              = { Name = "ecs-soci-private-${var.aws_region}a" }
   vpc_id            = aws_vpc.main.id
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, 3)
   availability_zone = "${var.aws_region}a"
 }
 
 resource "aws_subnet" "private_2" {
-  tags = { Name = "ecs-soci-private-${var.aws_region}b" }
+  tags              = { Name = "ecs-soci-private-${var.aws_region}b" }
   vpc_id            = aws_vpc.main.id
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, 4)
   availability_zone = "${var.aws_region}b"
 }
 
 resource "aws_route_table" "private" {
-  tags = { Name = "ecs-soci-private-rt" }
+  tags   = { Name = "ecs-soci-private-rt" }
   vpc_id = aws_vpc.main.id
 }
 
