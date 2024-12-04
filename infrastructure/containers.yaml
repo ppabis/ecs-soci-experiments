@@ -1,0 +1,13 @@
+---
+- Name: nginx
+  Image: ${ContainerImage}
+  Essential: true
+  PortMappings:
+    - ContainerPort: 80
+      Protocol: tcp
+  LogConfiguration:
+    LogDriver: awslogs
+    Options:
+      awslogs-group: ${LogGroupName}
+      awslogs-region: ${Region}
+      awslogs-stream-prefix: nginx
