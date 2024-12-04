@@ -21,6 +21,7 @@ resource "aws_ecs_task_definition" "nginx" {
     operating_system_family = "LINUX"
   }
 
+  # First we have to convert yaml to HCL and back from HCL to json
   container_definitions = jsonencode(
     yamldecode(
       templatefile("containers.yaml", {
