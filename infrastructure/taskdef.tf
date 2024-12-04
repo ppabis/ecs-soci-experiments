@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_cloudwatch_log_group" "sample_nginx" {
-  name              = "/ecs/sample-nginx"
+  name              = "/ecs/sample_nginx"
   retention_in_days = 7
 }
 
@@ -21,9 +21,13 @@ resource "aws_ecs_task_definition" "nginx" {
     operating_system_family = "LINUX"
   }
 
-  container_definitions = templatefile("containers.yaml", {
-    ContainerImage = "${aws_ecr_repository.nginx.repository_url}:${local.container_tag}"
-    LogGroupName   = aws_cloudwatch_log_group.sample_nginx.name
-    Region         = var.aws_region
-  })
+  container_definitions = jsonencode(
+    yamldecode(
+      templatefile("containers.yaml", {
+        ContainerImage = "${aws_ecr_repository.nginx.repository_url}:${local.container_tag}"
+        LogGroupName   = aws_cloudwatch_log_group.sample_nginx.name
+        Region         = var.aws_region
+      })
+    )
+  )
 }
